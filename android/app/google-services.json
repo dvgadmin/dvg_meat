@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "385768768361",
+    "project_id": "dvgmeat",
+    "storage_bucket": "dvgmeat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385768768361:android:4ad1ff60eca6b46b53f3f8",
+        "android_client_info": {
+          "package_name": "com.example.dvg_meat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7XWuH7I3IknBrSJb38wELDj8Wkr2uvp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385768768361:android:534db06923bf093053f3f8",
+        "android_client_info": {
+          "package_name": "com.example.firebase_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7XWuH7I3IknBrSJb38wELDj8Wkr2uvp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
