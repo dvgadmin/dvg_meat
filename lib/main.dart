@@ -1,4 +1,6 @@
 import 'package:dvg_meat/screens/home_page.dart';
+import 'package:dvg_meat/tool/firestore_import.dart';
+import 'package:dvg_meat/tool/firestore_import_recommendation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -14,6 +16,10 @@ print("Project ID: ${Firebase.app().options.projectId}");
 print("App ID: ${Firebase.app().options.appId}");
 print("API Key: ${Firebase.app().options.apiKey}");
 print("Storage Bucket: ${Firebase.app().options.storageBucket}");
+
+// Run only once when you want to import
+//  await FirestoreImporter().importProducts();
+//  await FirestoreImporterRecommendation().importProducts();
   runApp(const MyApp());
 }
 

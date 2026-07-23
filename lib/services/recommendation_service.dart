@@ -46,6 +46,11 @@ print("Recommendation Parsed");
 
         final productData = productDoc.data()!;
         print(productData);
+        print("=================================");
+print("Product : ${productDoc.id}");
+print("Purchase Options : ${productData["purchaseOptions"]}");
+print("Unit : ${productData["unit"]}");
+print("=================================");
         /// Step 4 : Get Image URL
         String imageUrl = "";
 

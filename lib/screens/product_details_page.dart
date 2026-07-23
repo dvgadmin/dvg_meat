@@ -36,8 +36,17 @@ void initState() {
 }
 
 void onRecommendationSelected(ProductModel product) {
+   print("=================================");
+  print("Selected Product : ${product.nameEn}");
+  print("ID : ${product.id}");
+  print("Unit : ${product.unit}");
+  print("Purchase Options : ${product.purchaseOptions}");
+  print("=================================");
+
   setState(() {
     currentProduct = product;
+    quantity = 1;
+    selectedWeight = "";
   });
 }
 
@@ -68,35 +77,77 @@ String getDeliveryDate() {
 
   return "${sunday.day}/${sunday.month}/${sunday.year}";
 }
-  final List<String> weights = [
-    "500g",
-    "1 Kg",
-    "2 Kg",
-  ];
 
   @override
   Widget build(BuildContext context) {
     final product = currentProduct;
-double selectedMultiplier = 1.0;
+    print("BUILD -> ${product.nameEn}");
+    print("BUILD Purchase Options -> ${product.purchaseOptions}");
+    final displayWeights = product.purchaseOptions.map((option) {
+  if (product.unit == "g") {
+    return "${option}g";
+  }
 
-switch (selectedWeight) {
-  case "250g":
-    selectedMultiplier = 0.25;
-    break;
+  if (option >= 1000) {
+    return "${option ~/ 1000} Kg";
+  }
 
-  case "500g":
-    selectedMultiplier = 0.5;
-    break;
-
-  case "1 Kg":
-    selectedMultiplier = 1.0;
-    break;
-
-  case "2 Kg":
-    selectedMultiplier = 2.0;
-    break;
+  return "${option}g";
+}).toList();
+      print("Current Product : ${product.nameEn}");
+      print("Purchase Options : ${product.purchaseOptions}");
+      print("Display Weights : $displayWeights");
+if (displayWeights.isNotEmpty) {
+  if (!displayWeights.contains(selectedWeight)) {
+    selectedWeight = displayWeights.first;
+  }
+} else {
+  selectedWeight = "";
 }
+//     final displayWeights =
+//     product.unit.toLowerCase() == "g"
+//         ? gweights
+//         : weights;
+// double selectedMultiplier = 1.0;
 
+// switch (selectedWeight) {
+//     case "100g":
+//     selectedMultiplier = 0.10;
+//     break;
+
+//   case "200g":
+//     selectedMultiplier = 0.20;
+//     break;
+
+//   case "250g":
+//     selectedMultiplier = 0.25;
+//     break;
+
+//   case "500g":
+//     selectedMultiplier = 0.5;
+//     break;
+
+//   case "1 Kg":
+//     selectedMultiplier = 1.0;
+//     break;
+
+//   case "2 Kg":
+//     selectedMultiplier = 2.0;
+//     break;
+// }
+double selectedMultiplier;
+
+if (selectedWeight.contains("Kg")) {
+  selectedMultiplier = double.parse(
+    selectedWeight.replaceAll("Kg", "").trim(),
+  );
+} else {
+  selectedMultiplier =
+      double.parse(
+        selectedWeight.replaceAll("g", "").trim(),
+      ) /
+      1000;
+}
 final double totalWeight = selectedMultiplier * quantity;
 final double totalPrice = product.price * totalWeight;
 
@@ -333,7 +384,7 @@ final double totalPrice = product.price * totalWeight;
                   // ),
 
                   // const SizedBox(height: 30),
-if (product.unit.toLowerCase() == "kg") ...[
+if (product.unit == "kg" || product.unit == "g")...[
   const Text(
     "Select Weight",
     style: TextStyle(
@@ -344,9 +395,10 @@ if (product.unit.toLowerCase() == "kg") ...[
 
   const SizedBox(height: 15),
 
-  Wrap(
-    spacing: 10,
-    children: weights.map((weight) {
+
+Wrap(
+  spacing: 10,
+  children: displayWeights.map((weight) {
       final selected = selectedWeight == weight;
 
       return ChoiceChip(
@@ -501,7 +553,9 @@ if (product.unit.toLowerCase() == "kg") ...[
         ),
       ),
       Text(
-        "${totalWeight.toStringAsFixed(2)} Kg",
+        product.unit == "g"
+    ? "${(totalWeight * 1000).toInt()} g"
+    : "${totalWeight.toStringAsFixed(2)} Kg",
         style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
@@ -623,10 +677,10 @@ if (product.unit.toLowerCase() == "kg") ...[
                     ],
                   ),
 
-                      RecommendationSection(
-  productId: currentProduct.id,
-  onProductSelected: onRecommendationSelected,
-),
+                  RecommendationSection(
+                    productId: currentProduct.id,
+                    onProductSelected: onRecommendationSelected,
+                  ),
                   const SizedBox(height: 100),
 
 

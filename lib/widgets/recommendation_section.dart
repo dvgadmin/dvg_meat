@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'dart:async';
 import '../../models/product_model.dart';
 import '../../services/recommendation_service.dart';
 
@@ -23,7 +23,8 @@ class _RecommendationSectionState
     extends State<RecommendationSection> {
   final RecommendationService _service =
       RecommendationService();
-
+late final ScrollController _scrollController;
+Timer? _autoScrollTimer;
   List<ProductModel> recommendations = [];
 
   bool isLoading = true;
@@ -31,6 +32,7 @@ class _RecommendationSectionState
   @override
   void initState() {
     super.initState();
+     _scrollController = ScrollController();
     loadRecommendations();
   }
 
@@ -72,6 +74,7 @@ void didUpdateWidget(covariant RecommendationSection oldWidget) {
         recommendations = data;
         isLoading = false;
       });
+      _startAutoScroll();
     }
   } catch (e) {
     print("Recommendation Error : $e");
@@ -82,6 +85,58 @@ void didUpdateWidget(covariant RecommendationSection oldWidget) {
       });
     }
   }
+}
+
+void _startAutoScroll() {
+  _autoScrollTimer?.cancel();
+
+  if (recommendations.length <= 1) return;
+
+  _autoScrollTimer = Timer.periodic(
+    const Duration(seconds: 2),
+    (_) async {
+      if (!_scrollController.hasClients) return;
+
+      const itemWidth = 102.0;
+
+      final max = _scrollController.position.maxScrollExtent;
+      final current = _scrollController.offset;
+
+      if (current + itemWidth >= max) {
+        // Move to the last position
+        await _scrollController.animateTo(
+          max,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+
+        // Wait on the last item
+        await Future.delayed(const Duration(seconds: 2));
+
+        if (!_scrollController.hasClients) return;
+
+        // Smoothly return to the first item
+        await _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        await _scrollController.animateTo(
+          current + itemWidth,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    },
+  );
+}
+
+@override
+void dispose() {
+  _autoScrollTimer?.cancel();
+  _scrollController.dispose();
+  super.dispose();
 }
 
   @override
@@ -121,6 +176,7 @@ void didUpdateWidget(covariant RecommendationSection oldWidget) {
           SizedBox(
             height: 90,
             child: ListView.separated(
+              controller: _scrollController,
               scrollDirection: Axis.horizontal,
               itemCount: recommendations.length,
               separatorBuilder: (_, __) =>

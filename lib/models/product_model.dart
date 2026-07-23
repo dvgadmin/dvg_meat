@@ -26,7 +26,7 @@ class ProductModel {
   final int ratingCount;
 
   final int displayOrder;
-
+  final List<int> purchaseOptions;
   ProductModel({
     required this.id,
     required this.categoryId,
@@ -53,6 +53,7 @@ class ProductModel {
     required this.ratingCount,
 
     required this.displayOrder,
+    required this.purchaseOptions,
   });
 
   factory ProductModel.fromFirestore(
@@ -89,6 +90,9 @@ class ProductModel {
       ratingCount: (json["ratingCount"] as num?)?.toInt() ?? 0,
 
       displayOrder: (json["displayOrder"] as num?)?.toInt() ?? 0,
+      purchaseOptions: List<int>.from(
+        json["purchaseOptions"] ?? [],
+      ),
     );
   }
 }
