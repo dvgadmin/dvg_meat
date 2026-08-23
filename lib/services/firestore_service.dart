@@ -54,4 +54,40 @@ class FirestoreService {
       return [];
     }
   }
+
+
+  /// Get single product by document ID
+static Future<ProductModel?> getProductById(String productId) async {
+  try {
+    final doc = await _firestore
+        .collection("Products")
+        .doc(productId)
+        .get();
+
+    if (!doc.exists) {
+      return null;
+    }
+
+    final data = doc.data()!;
+
+    String imageUrl = "";
+
+    try {
+      imageUrl = await _storage
+          .ref(data["imagePath"])
+          .getDownloadURL();
+    } catch (_) {
+      imageUrl = "";
+    }
+
+    return ProductModel.fromFirestore(
+      doc.id,
+      data,
+      imageUrl,
+    );
+  } catch (e) {
+    print("Get Product Error : $e");
+    return null;
+  }
+}
 }

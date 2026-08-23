@@ -33,7 +33,7 @@ Timer? _autoScrollTimer;
   void initState() {
     super.initState();
      _scrollController = ScrollController();
-    loadRecommendations();
+  //  loadRecommendations();
   }
 
 @override
@@ -50,42 +50,42 @@ void didUpdateWidget(covariant RecommendationSection oldWidget) {
       recommendations.clear();
     });
 
-    loadRecommendations();
+   // loadRecommendations();
   }
 }
 
-  Future<void> loadRecommendations() async {
-  try {
-    print("==================================");
-    print("Loading Recommendations...");
-    print("Product Id : ${widget.productId}");
+//   Future<void> loadRecommendations() async {
+//   try {
+//     print("==================================");
+//     print("Loading Recommendations...");
+//     print("Product Id : ${widget.productId}");
 
-    final data =
-        await _service.getRecommendations(widget.productId);
+//     final data =
+//         await _service.getRecommendations(widget.productId);
 
-    print("Recommendation Count : ${data.length}");
+//     print("Recommendation Count : ${data.length}");
 
-    for (var item in data) {
-      print(item.nameEn);
-    }
+//     for (var item in data) {
+//       print(item.nameEn);
+//     }
 
-    if (mounted) {
-      setState(() {
-        recommendations = data;
-        isLoading = false;
-      });
-      _startAutoScroll();
-    }
-  } catch (e) {
-    print("Recommendation Error : $e");
+//     if (mounted) {
+//       setState(() {
+//         recommendations = data;
+//         isLoading = false;
+//       });
+//       _startAutoScroll();
+//     }
+//   } catch (e) {
+//     print("Recommendation Error : $e");
 
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-}
+//     if (mounted) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//     }
+//   }
+// }
 
 void _startAutoScroll() {
   _autoScrollTimer?.cancel();

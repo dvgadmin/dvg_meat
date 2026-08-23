@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class RecommendationModel {
   final String productId;
   final int displayOrder;
@@ -9,13 +11,15 @@ class RecommendationModel {
     required this.active,
   });
 
+
   factory RecommendationModel.fromFirestore(
-    Map<String, dynamic> json,
-  ) {
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data();
+
     return RecommendationModel(
-      productId: json["productId"] ?? "",
-      displayOrder: (json["displayOrder"] as num?)?.toInt() ?? 0,
-      active: json["active"] ?? true,
+      productId: doc.id,
+      displayOrder: data['displayOrder'] ?? 0,
+      active: data['active'] ?? true,
     );
   }
 }

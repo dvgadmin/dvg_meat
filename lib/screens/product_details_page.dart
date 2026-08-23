@@ -1,3 +1,4 @@
+import 'package:dvg_meat/widgets/cooking_assistant_popup.dart';
 import 'package:dvg_meat/widgets/recommendation_section.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
@@ -22,8 +23,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1;
   String selectedWeight = "1 Kg";
   late String selectedLanguage;
-    final RecommendationService _recommendationService =
-    RecommendationService();
+    // final RecommendationService _recommendationService =
+    // RecommendationService();
     List<ProductModel> recommendations = [];
     late ProductModel currentProduct;
 
@@ -50,11 +51,28 @@ void onRecommendationSelected(ProductModel product) {
   });
 }
 
-Future<void> loadRecommendations() async {
+// Future<void> loadRecommendations() async {
 
-  recommendations = await _recommendationService
-      .getRecommendations(currentProduct.id);
+//   recommendations = await _recommendationService
+//       .getRecommendations(currentProduct.id);
 
+// }
+
+Future<void> _testRecommendations() async {
+  final service = RecommendationService();
+
+  final products = await service.getRecommendationsForCooking(
+    productId: "Broiler Without Skin", // Change if needed
+    cookingOptionId: "biryani",        // Change if needed
+  );
+
+  print("==================================");
+  print("Recommendations Found: ${products.length}");
+  print("==================================");
+
+  for (final product in products) {
+    print(product.nameEn);
+  }
 }
 
 String getDeliveryDate() {
@@ -169,17 +187,29 @@ final double totalPrice = product.price * totalWeight;
           child: Row(
             children: [
               Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.shopping_cart_outlined),
-                  label: const Text("Add to Cart"),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.green,
-                    side: const BorderSide(color: Colors.green),
-                    minimumSize: const Size(double.infinity, 55),
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      await showCookingAssistantPopup(
+                        context,
+                        currentProduct,
+                      );
+                    },
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    label: const Text("Add to Cart"),
                   ),
                 ),
-              ),
+              // Expanded(
+              //   child: OutlinedButton.icon(
+              //     onPressed: () {},
+              //     icon: const Icon(Icons.shopping_cart_outlined),
+              //     label: const Text("Add to Cart"),
+              //     style: OutlinedButton.styleFrom(
+              //       foregroundColor: Colors.green,
+              //       side: const BorderSide(color: Colors.green),
+              //       minimumSize: const Size(double.infinity, 55),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
@@ -677,11 +707,11 @@ if (product.unit.toLowerCase() == "kg") ...[
                     ],
                   ),
 
-                  RecommendationSection(
-                    productId: currentProduct.id,
-                    onProductSelected: onRecommendationSelected,
-                  ),
-                  const SizedBox(height: 100),
+                  // RecommendationSection(
+                  //   productId: currentProduct.id,
+                  //   onProductSelected: onRecommendationSelected,
+                  // ),
+                  // const SizedBox(height: 100),
 
 
                 ],

@@ -7,41 +7,34 @@ class FirestoreImporterRecommendation {
     try {
 
   final List<Map<String, dynamic>> recommendations = [
-      
       {
-        "productDocId": "nattukoli",
-        "productId": "ginger",
+        "productDocId": "Tomato",
+        "productId": "Tomato",
         "displayOrder": 1,
         "active": true,
       },
 	     {
-        "productDocId": "nattukoli",
-        "productId": "green chilli",
+        "productDocId": "Tomato",
+        "productId": "Tomato",
         "displayOrder": 2,
         "active": true,
       },
 	     {
-        "productDocId": "nattukoli",
-        "productId": "onion",
+        "productDocId": "Tomato",
+        "productId": "Tomato",
         "displayOrder": 3,
         "active": true,
       },
 	  	     {
-        "productDocId": "nattukoli",
-        "productId": "Small Onion",
+        "productDocId": "Tomato",
+        "productId": "Tomato",
         "displayOrder": 5,
         "active": true,
       },
 	  	{
-        "productDocId": "nattukoli",
+        "productDocId": "Tomato",
         "productId": "Tomato",
         "displayOrder": 6,
-        "active": true,
-      },
-	  	  	{
-        "productDocId": "nattukoli",
-        "productId": "garlic",
-        "displayOrder": 7,
         "active": true,
       }
   ];
