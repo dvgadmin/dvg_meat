@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:dvg_meat/models/cooking_option_model.dart';
 import 'package:dvg_meat/services/cooking_option_service.dart';
 import 'package:dvg_meat/services/recommendation_service.dart';
+import 'package:dvg_meat/screens/basket_screen.dart';
 
 class CookingAssistantPopup extends StatefulWidget {
   final ProductModel product;
@@ -331,9 +332,15 @@ Widget _buildRecommendationScreen() {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Basket screen later
-                    Navigator.pop(context);
-                  },
+  Navigator.pop(context);
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const BasketScreen(),
+    ),
+  );
+},
                   child: const Text(
                     "View Basket",
                   ),

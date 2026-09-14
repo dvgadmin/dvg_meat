@@ -2,6 +2,7 @@ import 'package:dvg_meat/models/product_model.dart';
 import 'package:dvg_meat/widgets/quantity_selector.dart';
 import 'package:dvg_meat/widgets/weight_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:dvg_meat/services/cart_service.dart';
 
 class RecommendationProductCard extends StatefulWidget {
   final ProductModel product;
@@ -26,6 +27,7 @@ class RecommendationProductCard extends StatefulWidget {
 
 class _RecommendationProductCardState
     extends State<RecommendationProductCard> {
+  final CartService _cartService = CartService();
   late int _selectedWeight;
 
   int _quantity = 1;
@@ -385,12 +387,36 @@ class _RecommendationProductCardState
                             ),
                           ),
                           onPressed: () {
-                            setState(() {
-                              _added = true;
-                            });
+  _cartService.addItem(
+    product: widget.product,
+    imageUrl: widget.product.imageUrl,
+    selectedWeight: _selectedWeight,
+    quantity: _quantity,
+  );
+print("========== CART TEST ==========");
+print("Cart Items: ${_cartService.items.length}");
+print("Product: ${widget.product.nameEn}");
+print("Weight: $_selectedWeight");
+print("Quantity: $_quantity");
+print("Total: ${_cartService.items.last.totalPrice}");
+print("Cart Total: ${_cartService.totalAmount}");
+print("==============================");
+  setState(() {
+    _added = true;
+  });
 
-                            widget.onAddToCart?.call();
-                          },
+  widget.onAddToCart?.call();
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        "${widget.product.nameEn} added to basket",
+      ),
+      backgroundColor: Colors.green,
+      duration: const Duration(seconds: 2),
+    ),
+  );
+},
                           icon: Icon(
                             _added
                                 ? Icons.check
