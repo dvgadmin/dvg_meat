@@ -27,6 +27,8 @@ class ProductModel {
 
   final int displayOrder;
   final List<int> purchaseOptions;
+  final String foodType;
+  
   ProductModel({
     required this.id,
     required this.categoryId,
@@ -54,6 +56,7 @@ class ProductModel {
 
     required this.displayOrder,
     required this.purchaseOptions,
+    required this.foodType,
   });
 
   factory ProductModel.fromFirestore(
@@ -93,6 +96,7 @@ class ProductModel {
       purchaseOptions: List<int>.from(
         json["purchaseOptions"] ?? [],
       ),
+      foodType: json["foodType"] ?? "",
     );
   }
 }

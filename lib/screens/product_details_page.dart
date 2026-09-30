@@ -3,6 +3,7 @@ import 'package:dvg_meat/widgets/recommendation_section.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 import '../services/recommendation_service.dart';
+import '../services/cart_service.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final ProductModel product;
@@ -27,6 +28,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     // RecommendationService();
     List<ProductModel> recommendations = [];
     late ProductModel currentProduct;
+    final CartService _cartService = CartService();
 
   @override
 void initState() {
@@ -94,6 +96,20 @@ String getDeliveryDate() {
   final sunday = now.add(Duration(days: daysUntilSunday));
 
   return "${sunday.day}/${sunday.month}/${sunday.year}";
+}
+
+int _weightToGrams(String weight) {
+  final value = weight
+      .replaceAll("Kg", "")
+      .replaceAll("kg", "")
+      .replaceAll("g", "")
+      .trim();
+
+  if (weight.toLowerCase().contains("kg")) {
+    return (double.parse(value) * 1000).toInt();
+  }
+
+  return int.parse(value);
 }
 
   @override
@@ -189,11 +205,33 @@ final double totalPrice = product.price * totalWeight;
               Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () async {
-                      await showCookingAssistantPopup(
-                        context,
-                        currentProduct,
-                      );
-                    },
+                        _cartService.addItem(
+                          product: currentProduct,
+                          imageUrl: currentProduct.imageUrl,
+                          selectedWeight: _weightToGrams(selectedWeight),
+                          quantity: quantity,
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "${currentProduct.nameEn} added to basket",
+                            ),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+
+                        await showCookingAssistantPopup(
+                          context,
+                          currentProduct,
+                        );
+                      },
+                    // onPressed: () async {
+                    //   await showCookingAssistantPopup(
+                    //     context,
+                    //     currentProduct,
+                    //   );
+                    // },
                     icon: const Icon(Icons.shopping_cart_outlined),
                     label: const Text("Add to Cart"),
                   ),

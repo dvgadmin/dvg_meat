@@ -17,7 +17,7 @@ class _BasketScreenState extends State<BasketScreen> {
   final CartService _cartService = CartService();
 
   List<CartItemModel> get _items => _cartService.items;
-
+  final String foodType = "";
   void _increaseQuantity(int index) {
     setState(() {
       _cartService.increaseQuantity(index);
@@ -44,6 +44,12 @@ class _BasketScreenState extends State<BasketScreen> {
         ),
         backgroundColor: Colors.red,
       ),
+    );
+  }
+  bool get _hasNonVegItem {
+    return _items.any(
+      (item) =>
+          item.product.foodType.toLowerCase() == "nonveg",
     );
   }
 
@@ -414,15 +420,37 @@ class _BasketScreenState extends State<BasketScreen> {
                 ),
               ),
               onPressed: () {
-                // Checkout will be implemented later.
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Checkout will be available soon.",
-                    ),
-                  ),
-                );
-              },
+                    if (!_hasNonVegItem) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Please add at least one meat item to continue.",
+                          ),
+                          backgroundColor: Colors.orange,
+                        ),
+                      );
+
+                      return;
+                    }
+
+                    // Continue to checkout
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Ready to proceed to checkout."),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  },
+              // onPressed: () {
+              //   // Checkout will be implemented later.
+              //   ScaffoldMessenger.of(context).showSnackBar(
+              //     const SnackBar(
+              //       content: Text(
+              //         "Checkout will be available soon.",
+              //       ),
+              //     ),
+              //   );
+              // },
               child: const Text(
                 "Proceed to Checkout",
                 style: TextStyle(
